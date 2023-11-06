@@ -5,54 +5,75 @@
 #include "main.hpp"
 // tests for exercise 1
 
-TEST_CASE("Ex1 emailcheck() ", "[example]")
+TEST_CASE("Ex1 rewritesplitwords() ", "[example]")
 {
-	int ret;
-	string email;
 
-	email = "ABCDEF@company.com";
-	ret = emailcheck(email);
-	cout << "test email string is " << email << "\tYour return value is: " << ret << endl;
+	string filename = "allstates.txt";
+	string state, name;
+	char gen;
+	int year, cnt;
+	ifstream ifs;
+	int count;
+	char delimiter = ',';
 
-	INFO("The result should  1\n");
-	REQUIRE(ret == 1);
-	cout << "--------------------------------------------------\n";
+	count = rewritesplitwords(filename, delimiter);
 
-	email = "ABC@company.com";
-	ret = emailcheck(email);
-	cout << "test email string is " << email << "\tYour return value is: " << ret << endl;
-
-	INFO("The result should  0\n");
-	REQUIRE(ret == 0);
-	cout << "--------------------------------------------------\n";
-
-	email = "johnsmith@company.io.edu";
-	ret = emailcheck(email);
-	cout << "test email string is " << email << "\tYour return value is: " << ret << endl;
-
-	INFO("The result should  1\n");
-	REQUIRE(ret == 1);
+	REQUIRE(count == 4080);
 	cout << "--------------------------------------------------\n";
 }
 
-TEST_CASE("Ex2 emailcheck() ", "[example]")
+TEST_CASE("Ex2 rewritesplitwords() ", "[example]")
 {
-	int ret;
-	string email;
 
-	email = "john@company.server.io";
-	ret = emailcheck(email);
-	cout << "test email string is " << email << "\tYour return value is: " << ret << endl;
+	ifstream ifs;
+	string state, name;
+	char gen;
+	int year, cnt;
+	int maxINcnt = 0, maxDEcnt = 0;
 
-	INFO("The result should  0\n");
-	REQUIRE(ret == 0);
+	ifs.open("split.txt");
+	if (!ifs)
+		cerr << "File Open Error\n";
+
+	while (ifs >> state >> gen >> year >> name >> cnt)
+	{
+		// cout << state << "\t" << gen << "\t" << year << "\t" << name << "\t" << cnt << endl;
+		if (state == "IN" and year == 2011 and gen == 'F')
+		{
+			cout << state << "\t" << gen << "\t" << year << "\t" << name << "\t" << cnt << endl;
+			if (maxINcnt < cnt)
+				maxINcnt = cnt;
+		}
+		if (state == "DE" and year == 2018 and gen == 'M')
+		{
+			cout << state << "\t" << gen << "\t" << year << "\t" << name << "\t" << cnt << endl;
+			if (maxDEcnt < cnt)
+				maxDEcnt = cnt;
+		}
+	}
+
+	REQUIRE(maxINcnt == 453);
+	REQUIRE(maxDEcnt == 63);
 	cout << "--------------------------------------------------\n";
+}
 
-	email = "john@company.server";
-	ret = emailcheck(email);
-	cout << "test email string is " << email << "\tYour return value is: " << ret << endl;
+TEST_CASE("Ex3 MFN() ", "[example]")
+{
 
-	INFO("The result should  0\n");
-	REQUIRE(ret == 0);
+	ifstream ifs;
+	string state, name;
+	char gen;
+	int year, cnt;
+	string retname;
+
+	ifs.open("split.txt");
+	if (!ifs)
+		cerr << "File Open Error\n";
+
+	retname = MFN("IN", 2018);
+	REQUIRE(retname == "Oliver");
+	retname = MFN("DE", 2018);
+	REQUIRE(retname == "Liam");
+
 	cout << "--------------------------------------------------\n";
 }

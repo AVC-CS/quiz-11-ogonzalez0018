@@ -5,7 +5,7 @@
 
 ---
 
-### Quiz 8: Question 2
+### Midterm 2: Question 2
 
 ### Edit the "main.hpp"
 
